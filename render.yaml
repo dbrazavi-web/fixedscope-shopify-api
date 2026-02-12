@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: fixedscope-shopify-proxy
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn fixedscope_shopify_proxy:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: FIXEDSCOPE_PROXY_KEY
+        sync: false
+      - key: SHOPIFY_CLIENT_ID
+        sync: false
+      - key: SHOPIFY_CLIENT_SECRET
+        sync: false
