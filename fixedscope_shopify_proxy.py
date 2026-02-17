@@ -44,6 +44,14 @@ def require_key(f):
         return f(*args, **kwargs)
     return decorated
 
+@app.route("/robots.txt")
+def robots():
+    return "User-agent: *\nAllow: /\n", 200, {"Content-Type": "text/plain"}
+
+@app.route("/")
+def index():
+    return jsonify({"service":"fixedscope-shopify-proxy","status":"ok"})
+
 @app.route("/health")
 def health():
     return jsonify({"status":"ok","service":"fixedscope-shopify-proxy"})
@@ -113,10 +121,5 @@ def daily(client):
         "refunds":round(ref,2),"net":round(net,2),"units":units,"aov":round(net/len(ords),2) if ords else 0,
         "products":sorted([{"name":k,**v} for k,v in prods.items()],key=lambda x:x["revenue"],reverse=True)})
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-
-@app.route("/robots.txt")
-def robots():
-    return "User-agent: *\nAllow: /\n", 200, {"Content-Type": "text/plain"}
+port = int(os.environ.get("PORT", 5000))
+app.run(host="0.0.0.0", port=port)
